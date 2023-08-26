@@ -34,10 +34,11 @@ const router = {
 
         break;
       default:
-        if (route.startsWith('product-')) {
+        if (route.startsWith('/product-')) {
           pageElement = document.createElement('details-page');
 
           const paramId = route.substring(route.lastIndexOf('-') + 1);
+
           pageElement.dataset.id = paramId;
         }
     }
