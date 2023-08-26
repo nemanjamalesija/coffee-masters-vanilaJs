@@ -8,6 +8,11 @@ const router = {
       });
     });
 
+    // Event handler for url changes
+    window.addEventListener('popstate', (e) => {
+      router.go(e.state.route, false);
+    });
+
     // Check the initial URL
     router.go(location.pathname);
   },
@@ -20,14 +25,21 @@ const router = {
     let pageElement = null;
     switch (route) {
       case '/':
-        pageElement = document.createElement('h1');
-        pageElement.textContent = 'Menu';
+        pageElement = document.createElement('menu-page');
+
         break;
 
       case '/order':
-        pageElement = document.createElement('h1');
-        pageElement.textContent = 'Your order';
+        pageElement = document.createElement('order-page');
+
         break;
+      default:
+        if (route.startsWith('product-')) {
+          pageElement = document.createElement('details-page');
+
+          const paramId = route.substring(route.lastIndexOf('-') + 1);
+          pageElement.dataset.id = paramId;
+        }
     }
 
     if (pageElement) {
