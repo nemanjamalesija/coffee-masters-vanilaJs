@@ -8,6 +8,7 @@ import MenuPage from './components/menuPage.js';
 import DetailsPage from './components/detailsPage.js';
 import OrderPage from './components/orderPage.js';
 import ProductItem from './components/productItem.js';
+import CartItem from '/components/CartItem.js';
 
 window.app = {};
 app.store = store;

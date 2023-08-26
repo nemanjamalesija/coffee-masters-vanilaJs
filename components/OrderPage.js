@@ -1,4 +1,10 @@
 export default class OrderPage extends HTMLElement {
+  #user = {
+    name: '',
+    phone: '',
+    email: '',
+  };
+
   constructor() {
     super();
 
@@ -9,7 +15,7 @@ export default class OrderPage extends HTMLElement {
     this.root.appendChild(section);
 
     async function loadCSS() {
-      const request = await fetch('/components/orderPage.css');
+      const request = await fetch('/components/OrderPage.css');
       styles.textContent = await request.text();
     }
     loadCSS();
@@ -55,6 +61,40 @@ export default class OrderPage extends HTMLElement {
             </li>                
         `;
     }
+
+    this.setFormBindings(this.root.querySelector('form'));
+  }
+
+  setFormBindings(form) {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      alert(
+        `Thanks for your order ${this.#user.name}. ${
+          this.#user.email
+            ? 'We will be sending you the receipt over email.'
+            : 'Ask at the counter for a receipt.'
+        }`
+      );
+      this.#user.name = '';
+      this.#user.email = '';
+      this.#user.phone = '';
+    });
+
+    // Set double data binding
+    Array.from(form.elements).forEach((element) => {
+      if (element.name) {
+        element.addEventListener('change', (event) => {
+          this.#user[element.name] = element.value;
+        });
+      }
+    });
+    this.#user = new Proxy(this.#user, {
+      set(target, property, value) {
+        target[property] = value;
+        form.elements[property].value = value;
+        return true;
+      },
+    });
   }
 }
 
